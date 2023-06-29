@@ -1,8 +1,11 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-var validator = require('validator');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+
+const jwtSecretToken = 'CSI-is-the-best';
 
 const app = express();
 const port = 3000;
@@ -10,75 +13,99 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-const db = new sqlite3.Database('./db/database.db');
+mongoose.connect('mongodb://localhost/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB');
 
-app.post('/register', (req, res) => {
-  var { username, password } = req.body;
-  username = username.trim();
-  password = password.trim();
-  if (!validator.isAlphanumeric(username)) {
-   return res.status(400).json({ error: 'Username must be alphanumeric' });
-  }
-  if(!validator.isStrongPassword(password, {minLength: 8, minLowercase: 0, minUppercase: 0, minNumbers: 1, minSymbols: 0, returnScore: false})) {
-    return res.status(400).json({ error: 'Password must be at least 8 characters long and contain at least 1 number' });
-  }
+    // Define a schema for the user data
+    const userSchema = new mongoose.Schema({
+      username: { type: String, required: true, unique: true },
+      passwordHash: { type: String, required: true },
+    });
 
-  db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Cant access database' });
-    } else if (row) {
-      return res.status(400).json({ error: 'Username already exists' });
-    } else {
+    // Define a model based on the schema
+    const User = mongoose.model('User', userSchema);
 
-        bcrypt.hash(password, 10, (err, hashedPassword) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-          db.run('INSERT INTO users (username, passwordhash) VALUES (?, ?)', [username, hashedPassword], function(err) {
-            if (err) {
-              console.error(err);
+    app.post('/register', (req, res) => {
+      let { username, password } = req.body;
+      username = username.trim();
+      password = password.trim();
+
+      if (!validator.isAlphanumeric(username)) {
+        return res.status(400).json({ error: 'Username must be alphanumeric' });
+      }
+
+      if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 0, minUppercase: 0, minNumbers: 1, minSymbols: 0, returnScore: false })) {
+        return res.status(400).json({ error: 'Password must be at least 8 characters long and contain at least 1 number' });
+      }
+
+      User.findOne({ username })
+        .then((existingUser) => {
+          if (existingUser) {
+            return res.status(400).json({ error: 'Username already exists' });
+          }
+
+          bcrypt.hash(password, 10)
+            .then((hashedPassword) => {
+              const newUser = new User({ username, passwordHash: hashedPassword });
+              newUser.save()
+                .then(() => {
+                  const token = jwt.sign({ message: 'User created successfully' }, jwtSecretToken, { expiresIn: '10h' });
+                  return res.json({ token });
+                })
+                .catch((error) => {
+                  console.error(error);
+                  return res.status(500).json({ error: 'Internal Server Error' });
+                });
+            })
+            .catch((error) => {
+              console.error(error);
               return res.status(500).json({ error: 'Internal Server Error' });
-            } else {
-              return res.json({ message: 'User created successfully' });
-            }
-          });
-        }
-      });
-    }
-  });
-});
-
-app.post('/login', (req, res) => {
-  var { username, password } = req.body;
-  username = username.trim();
-  password = password.trim();
-  
-  db.get('SELECT * FROM users WHERE username = ?', [username], (err, row) => {
-    console.log(row)
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Internal Server Error' });
-    } else if (!row) {
-      return res.status(400).json({ error: 'Invalid username or password' });
-    } else {
-      bcrypt.compare(password, row.passwordhash, (err, result) => {
-        if (err) {
-          console.error(err);
+            });
+        })
+        .catch((error) => {
+          console.error(error);
           return res.status(500).json({ error: 'Internal Server Error' });
-        } else if (result) {
-          return res.json({ message: 'Login successful' });
-        } else {
-          return res.status(400).json({ error: 'Invalid username or password' });
-        }
-      });
-    }
+        });
+    });
+
+    app.post('/login', (req, res) => {
+      let { username, password } = req.body;
+      username = username.trim();
+      password = password.trim();
+
+      User.findOne({ username })
+        .then((user) => {
+          if (!user) {
+            return res.status(400).json({ error: 'Invalid username or password' });
+          }
+
+          bcrypt.compare(password, user.passwordHash)
+            .then((result) => {
+              if (result) {
+                const token = jwt.sign({ message: 'Login successful' }, jwtSecretToken, { expiresIn: '10h' });
+                return res.json(token);
+              } else {
+                return res.status(400).json({ error: 'Invalid username or password' });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+              return res.status(500).json({ error: 'Internal Server Error' });
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+          return res.status(500).json({ error: 'Internal Server Error' });
+        });
+    });
+
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
   });
-});
 
 module.exports = app;
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
