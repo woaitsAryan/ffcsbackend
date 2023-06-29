@@ -20,13 +20,13 @@ describe('User Registration and Login', () => {
 
   it('should return an error when registering with an existing username', async () => {
     const response = await request(app).post('/register').send(testUser);
-    expect(response.status).toBe(402);
+    expect(response.status).toBe(400);
     expect(response.body.error).toBe('Username already exists');
   });
 
   it('should return an error when registering with a weak password', async () => {
     const response = await request(app).post('/register').send(invalidUser);
-    expect(response.status).toBe(402);
+    expect(response.status).toBe(400);
     expect(response.body.error).toBe(
       'Password must be at least 8 characters long and contain at least 1 number'
     );
@@ -40,7 +40,7 @@ describe('User Registration and Login', () => {
 
   it('should return an error when logging in with invalid credentials', async () => {
     const response = await request(app).post('/login').send(invalidUser);
-    expect(response.status).toBe(408);
+    expect(response.status).toBe(400);
     expect(response.body.error).toBe('Invalid username or password');
   });
 });
