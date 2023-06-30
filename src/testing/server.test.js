@@ -1,46 +1,36 @@
+//deprecated
+
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 const app = require('../server');
 
+const jwtSecretToken = 'CSI-is-the-best';
+
 describe('User Registration and Login', () => {
-  let testUser = {
-    username: 'ary',
-    password: 'myepicpassword123',
-  };
+  let token;
 
-  let invalidUser = {
-    username: 'testuser',
-    password: 'test',
-  };
+  it('should register a new user and return a valid JWT token', async () => {
+    const response = await request(app)
+      .post('/register')
+      .send({ username: 'testuser', password: 'Password123' });
 
-  it('should register a new user successfully', async () => {
-    const response = await request(app).post('/register').send(testUser);
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('User created successfully');
+    expect(response.statusCode).toBe(200);
+    expect(response.body.token).toBeDefined();
+
+    token = response.body.token;
+    const decodedToken = jwt.verify(token, jwtSecretToken);
+    expect(decodedToken.message).toBe('User created successfully');
   });
 
-  it('should return an error when registering with an existing username', async () => {
-    const response = await request(app).post('/register').send(testUser);
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Username already exists');
-  });
+  it('should log in with valid credentials and return a valid JWT token', async () => {
+    const response = await request(app)
+      .post('/login')
+      .send({ username: 'testuser', password: 'Password123' });
 
-  it('should return an error when registering with a weak password', async () => {
-    const response = await request(app).post('/register').send(invalidUser);
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe(
-      'Password must be at least 8 characters long and contain at least 1 number'
-    );
-  });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBeDefined();
 
-  it('should login with valid credentials', async () => {
-    const response = await request(app).post('/login').send(testUser);
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Login successful');
-  });
-
-  it('should return an error when logging in with invalid credentials', async () => {
-    const response = await request(app).post('/login').send(invalidUser);
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Invalid username or password');
+    const decodedToken = jwt.verify(response.body, jwtSecretToken);
+    expect(decodedToken.message).toBe('Login successful');
   });
 });

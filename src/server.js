@@ -1,3 +1,5 @@
+//deprecated
+
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
@@ -125,4 +127,4 @@ mongoose.connect('mongodb://localhost/mydatabase', { useNewUrlParser: true, useU
     console.error('Error connecting to MongoDB:', error);
   });
 
-module.exports = app;
+module.exports = app; 
