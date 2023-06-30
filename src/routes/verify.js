@@ -1,7 +1,6 @@
-const jwt = require('jsonwebtoken');
-import envHandler from '../helpers/envHandler';
-import {protect} from '../middleware/protect';
-const express = require('express');
+import {protect} from '../middleware/protect.js';
+import express from 'express';
+import jwt from 'jsonwebtoken';
 
 const verify = express.Router();
 

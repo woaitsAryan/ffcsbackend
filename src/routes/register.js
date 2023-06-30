@@ -1,10 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-import User from '../models/userModel';
-const validator = require('validator');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-import envHandler from '../helpers/envHandler';
+import express from 'express';
+import mongoose from 'mongoose';
+import User from '../models/userModel.js';
+import validator from 'validator';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import envHandler from '../helpers/envHandler.js';
 
 const register = express.Router();
 

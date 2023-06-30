@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
-import envHandler from '../helpers/envHandler';
+import jwt from 'jsonwebtoken';
+import envHandler from '../helpers/envHandler.js';
+import catchAsync from '../helpers/catchAsync.js';
 
 const jwtVerifyPromisified = (token, secret) => {
     return new Promise((resolve, reject) => {
