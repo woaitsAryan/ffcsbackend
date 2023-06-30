@@ -13,6 +13,23 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  jwt.verify(token, jwtSecretToken, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid token' });
+    }
+    req.user = user;
+    next();
+  });
+}
+
 mongoose.connect('mongodb://localhost/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected to MongoDB');
@@ -26,7 +43,7 @@ mongoose.connect('mongodb://localhost/mydatabase', { useNewUrlParser: true, useU
     // Define a model based on the schema
     const User = mongoose.model('User', userSchema);
 
-    app.post('/register', (req, res) => {
+    app.post('/register', authenticateToken, (req, res) => {
       let { username, password } = req.body;
       username = username.trim();
       password = password.trim();
@@ -69,7 +86,7 @@ mongoose.connect('mongodb://localhost/mydatabase', { useNewUrlParser: true, useU
         });
     });
 
-    app.post('/login', (req, res) => {
+    app.post('/login', authenticateToken, (req, res) => {
       let { username, password } = req.body;
       username = username.trim();
       password = password.trim();
