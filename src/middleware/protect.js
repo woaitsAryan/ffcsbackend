@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-
-const jwtSecretToken = 'CSI-is-the-best';
+import envHandler from '../helpers/envHandler';
 
 const jwtVerifyPromisified = (token, secret) => {
     return new Promise((resolve, reject) => {
@@ -28,12 +27,12 @@ export const protect = catchAsync(
 
         const decoded = await jwtVerifyPromisified(
             token,
-            jwtSecretToken
+            envHandler('JWTSecret')
         )
         .catch((err) => {
             return res.status(400).json({ error: err.message });
         });
-        
+
         req.user = decoded;
         next();
     }

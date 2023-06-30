@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-const URL = 'mongodb://localhost/mydatabase'
+const URL = 'mongodb://localhost:27017';
 const connectToDB = () =>
     mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log('Connected to Database!'));
 
