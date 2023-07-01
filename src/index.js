@@ -8,9 +8,11 @@ import verify from './routes/verify.js';
 import connectToDB from './initializers/DB.js';
 import envHandler from './helpers/envHandler.js';
 
+const ip = '127.0.0.1'
+
 const app = express();
 app.use(express.json());
-app.use(cors);
+app.use(cors());
 app.use(expressMongoSanitize());
 connectToDB();
 
@@ -18,7 +20,7 @@ app.use('/register', register);
 app.use('/login', login);
 app.use('/verify', verify);
 
-app.listen(envHandler('port'), () => {
+app.listen(envHandler('port'),ip ,() => {
     console.log('Server started on port 3000')
 });
 

@@ -19,8 +19,8 @@ register.post('/', (req, res) => {
 
     if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 0, minUppercase: 0, minNumbers: 1, minSymbols: 0, returnScore: false })) {
         return res.status(400).json({ error: 'Password must be at least 8 characters long and contain at least 1 number' });
-    }
-
+    } 
+    
     User.findOne({ username })
         .then((existingUser) => {
           if (existingUser) {
@@ -32,7 +32,7 @@ register.post('/', (req, res) => {
               const newUser = new User({ username, passwordHash: hashedPassword });
               newUser.save()
                 .then(() => {
-                  const token = jwt.sign({ message: 'User created successfully' }, envHandler('JWTSecret'), { expiresIn: '10h' });
+                  const token = jwt.sign({ username: username, password: password }, envHandler('JWTSecret'), { expiresIn: '10h' });
                   return res.json({ token });
                 })
                 .catch((error) => {
