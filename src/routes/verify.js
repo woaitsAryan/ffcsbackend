@@ -1,12 +1,16 @@
 import {protect} from '../middleware/protect.js';
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import User from '../models/userModel.js';
 
 const verify = express.Router();
 
 verify.post('/', protect, (req, res) => {
-    return res.json({ username: req.user });
-    //add some more data to return too, for the server
+    username = req.user;
+    //Find timetable of the user and return it
+    User.findOne({ username })
+        .then((existingUser) => {
+            return res.json({ timetable: existingUser.timetable });
+        })
 });
 
 export default verify;
