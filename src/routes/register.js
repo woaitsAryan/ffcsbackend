@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import User from '../models/userModel.js';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
@@ -32,7 +31,7 @@ register.post('/', (req, res) => {
               const newUser = new User({ username, passwordHash: hashedPassword });
               newUser.save()
                 .then(() => {
-                  const token = jwt.sign({ username: username, password: password }, envHandler('JWTSecret'), { expiresIn: '10h' });
+                  const token = jwt.sign({ username: username, password: password }, envHandler('JWTSecret'), { expiresIn: '30d' });
                   return res.json({ token });
                 })
                 .catch((error) => {

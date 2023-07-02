@@ -1,6 +1,5 @@
 import express from 'express';
 import expressMongoSanitize from 'express-mongo-sanitize';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import register from './routes/register.js';
 import login from './routes/login.js';

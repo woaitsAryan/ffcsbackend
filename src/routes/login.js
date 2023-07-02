@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import User from '../models/userModel.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -22,7 +21,7 @@ login.post('/', (req, res) => {
         bcrypt.compare(password, user.passwordHash)
           .then((result) => {
             if (result) {
-              const token = jwt.sign({ username: username, password: password }, envHandler('JWTSecret'), { expiresIn: '10h' });
+              const token = jwt.sign({ username: username, password: password }, envHandler('JWTSecret'), { expiresIn: '30d' });
               return res.json({ token });
             } else {
               return res.status(400).json({ error: 'Invalid username or password' });
