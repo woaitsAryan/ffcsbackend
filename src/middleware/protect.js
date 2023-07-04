@@ -24,14 +24,16 @@ export const protect = catchAsync(
         )
             token = req.headers.authorization.split(' ')[1];
         if (!token)
-            return res.status(400).json({ error: 'Username must be alphanumeric' });
+            return res.status(400).json({ error: 'Username must be alphanumeric' ,
+                                          verified: false});
 
         const decoded = await jwtVerifyPromisified(
             token,
             envHandler('JWTSecret')
         )
         .catch((err) => {
-            return res.status(400).json({ error: err.message });
+            return res.status(400).json({ error: err.message,
+                                          verified: false });
         });
 
         req.user = decoded;
