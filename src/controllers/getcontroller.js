@@ -1,9 +1,10 @@
 import User from '../models/userModel.js';
+import catchAsync from '../helpers/catchAsync.js';
 
-
-export const Verifycontroller = catchAsync(
+export const Getcontroller = catchAsync(
     async(req, res) => {
-        username = req.user;
+        
+        const {username} = req.user;
 
         const user = await User.findOne({ username });
 
