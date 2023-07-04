@@ -6,6 +6,7 @@ import login from './routes/login.js';
 import timetable from './routes/timetable.js';
 import connectToDB from './initializers/DB.js';
 import envHandler from './helpers/envHandler.js';
+import share from './routes/share.js';
 
 const ip = '127.0.0.1'
 
@@ -18,7 +19,7 @@ connectToDB();
 app.use('/register', register);
 app.use('/login', login);
 app.use('/timetable', timetable);
-
+app.use('/share', share);
 app.listen(envHandler('port'),ip ,() => {
     console.log('Server started on port 3000')
 });
