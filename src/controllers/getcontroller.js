@@ -8,8 +8,8 @@ export const Getcontroller = catchAsync(
 
         const user = await User.findOne({ username });
 
-        if(!user || !user.timetable){
+        if(!user || !user.timetables){
             return res.status(400).json({ error: 'No timetable found' });
         }
-        return res.json({ timetable: user.timetable });
+        return res.json({ timetable: user.timetables });
 })
