@@ -1,6 +1,6 @@
-import { timetableDefaultValue } from "../models/defaulttimetable";
-import { User } from "../models/user";
-import { catchAsync } from "../utils/catchAsync";
+import { timetableDefaultValue } from "../models/defaulttimetable.js";
+import User from "../models/userModel.js";
+import catchAsync from "../helpers/catchAsync.js";
 
 export const Resetcontroller = catchAsync(
     async(req, res) => {

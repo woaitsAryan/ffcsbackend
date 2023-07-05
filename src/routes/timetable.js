@@ -5,11 +5,11 @@ import { Storecontroller } from '../controllers/storecontroller.js';
 import { Updatecontroller } from '../controllers/updatecontroller.js';
 import { Resetcontroller } from '../controllers/resetcontroller.js';
 
-const verify = express.Router();
+const timetable = express.Router();
 
-verify.post('/get', protect, Getcontroller);
-verify.post('/set', protect, Storecontroller)
-verify.post('/update', protect, Updatecontroller)
-verify.post('/reset', protect, Resetcontroller)
+timetable.post('/get', protect, Getcontroller);
+timetable.post('/set', protect, Storecontroller)
+timetable.post('/update', protect, Updatecontroller)
+timetable.post('/reset', protect, Resetcontroller)
 
 export default timetable;
