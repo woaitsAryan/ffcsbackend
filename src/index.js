@@ -9,8 +9,6 @@ import envHandler from './helpers/envHandler.js';
 import share from './routes/share.js';
 import verify from './routes/verify.js';
 
-const ip = '127.0.0.1'
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -23,7 +21,7 @@ app.use('/timetable', timetable);
 app.use('/share', share);
 app.use('/verify', verify);
 
-app.listen(envHandler('port'),ip ,() => {
+app.listen(envHandler('port'),() => {
     console.log('Server started on port 3000')
 });
 
