@@ -36,7 +36,7 @@ export const protect = catchAsync(
                                           verified: false });
         });
 
-        req.user = decoded;
+        req.userID = decoded;
         next();
     }
 );

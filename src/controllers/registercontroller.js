@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import envHandler from '../helpers/envHandler.js';
 import catchAsync from '../helpers/catchAsync.js';
+import mongoose from 'mongoose';
 
 export const Registercontroller = catchAsync(
     async(req, res) => {
@@ -24,9 +25,9 @@ export const Registercontroller = catchAsync(
             return res.status(400).json({ error: 'Username already exists' });
         }
         const hashedpassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, passwordHash: hashedpassword });
+        const newUser = new User({ _id: new mongoose.Types.ObjectId(), username, passwordHash: hashedpassword });
         await newUser.save();
-        const token = jwt.sign({ username: username, password: password }, envHandler('JWTSecret'), { expiresIn: '30d' });
+        const token = jwt.sign({ userID: newUser._id }, envHandler('JWTSecret'), { expiresIn: '30d' });
         return res.json({ token });
 
 

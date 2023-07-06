@@ -3,17 +3,17 @@ import catchAsync from '../helpers/catchAsync.js';
 
 export const Updatecontroller = catchAsync(
     async(req, res) => {
-      const { username } = req.user;
-      const timetable = req.body.timetable;
-      const timetablenum = req.body.num;
+      const { userID } = req.userID;
+      const {daydata, num, day} = req.body;
+      const timetablenum = parseInt(num);
     
-      const user = await User.findOne({ username: username });
+      const user = await User.findById(userID);
       if (!user) {
         return res.status(400).json({ error: 'User not found' });
       }
     
       if (user.timetables.length > timetablenum) {
-        user.timetables[timetablenum].data = timetable;
+        user.timetables[timetablenum].day = daydata;
         await user.save();
         return res.json({ message: 'Timetable updated' });
       } else {

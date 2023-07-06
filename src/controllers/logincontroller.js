@@ -18,7 +18,7 @@ export const Logincontroller = catchAsync(
         if(!result){
             return res.status(400).json({ error: 'Invalid username or password' });
         }
-        const token = jwt.sign({ username: username, password: password }, envHandler('JWTSecret'), { expiresIn: '30d' });
+        const token = jwt.sign({ userID: user._id }, envHandler('JWTSecret'), { expiresIn: '30d' });
         return res.json({ token });
 
     }

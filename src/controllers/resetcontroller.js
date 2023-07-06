@@ -4,14 +4,15 @@ import catchAsync from "../helpers/catchAsync.js";
 
 export const Resetcontroller = catchAsync(
     async(req, res) => {
-        const {username} = req.user;
-        const timetablenum = req.body.num;
+        const {userID} = req.userID;
+        let num = req.body.num;
+        num = parseInt(num);
 
-        const user = await User.findOne({ username });
+        const user = await User.findById(userID);
         if(!user){
             return res.status(400).json({ error: 'User not found' });
         }
-        user.timetables[timetablenum] = timetableDefaultValue;
+        user.timetables.splice(num, 1, timetableDefaultValue);
         await user.save();
         return res.json({ message: 'Timetable reset' });
-})
+})  

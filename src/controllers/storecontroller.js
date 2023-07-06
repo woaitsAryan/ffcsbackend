@@ -3,15 +3,16 @@ import catchAsync from '../helpers/catchAsync.js';
 
 export const Storecontroller = catchAsync(
     async(req, res) => {
-        const {username} = req.user;
-        const timetable = req.body.timetable;
-        const timetablenum = req.body.num;
+        const {userID} = req.userID;
+        const { timetable} = req.body;
+        
+        const user = await User.findById(userID);
 
-        const user = await User.findOne({ username });
         if(!user){
             return res.status(400).json({ error: 'User not found' });
         }
-        user.timetables[timetablenum] = timetable;
+        user.timetables.push(timetable);
+
         await user.save();
         return res.json({ message: 'Timetable saved successfully' });
 })
