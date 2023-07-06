@@ -1,5 +1,6 @@
 import User from '../models/userModel.js';
 import catchAsync from '../helpers/catchAsync.js';
+import { getDayNumber } from '../helpers/daynum.js';
 
 export const Updatecontroller = catchAsync(
     async(req, res) => {
@@ -13,7 +14,8 @@ export const Updatecontroller = catchAsync(
       }
     
       if (user.timetables.length > timetablenum) {
-        user.timetables[timetablenum].day = daydata;
+        const daynum = getDayNumber(day);
+        user.timetables[timetablenum][daynum].data = daydata;
         await user.save();
         return res.json({ message: 'Timetable updated' });
       } else {

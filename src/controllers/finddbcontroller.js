@@ -10,4 +10,4 @@ export const Finddbcontroller = catchAsync(
         }
         const timetable = user.timetables[num];
         return res.json({timetable: timetable});
-    })
+})
