@@ -1,9 +1,6 @@
 import {protect} from '../middleware/protect.js';
 import express from 'express';
-import { Getcontroller } from '../controllers/getcontroller.js';
-import { Storecontroller } from '../controllers/storecontroller.js';
-import { Updatecontroller } from '../controllers/updatecontroller.js';
-import { Resetcontroller } from '../controllers/resetcontroller.js';
+import { Getcontroller, Storecontroller, Updatecontroller, Resetcontroller } from '../controllers/timetablecontroller.js';
 
 const timetable = express.Router();
 

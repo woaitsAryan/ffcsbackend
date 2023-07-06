@@ -1,5 +1,4 @@
-import { Finddbcontroller } from '../controllers/finddbcontroller.js';
-import { Getdbcontroller } from '../controllers/getdbcontroller.js';
+import { Finddbcontroller, Getdbcontroller } from '../controllers/sharecontroller.js';
 import {protect} from '../middleware/protect.js';
 import express from 'express';
 

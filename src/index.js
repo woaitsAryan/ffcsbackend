@@ -8,11 +8,16 @@ import connectToDB from './initializers/DB.js';
 import envHandler from './helpers/envHandler.js';
 import share from './routes/share.js';
 import verify from './routes/verify.js';
+import courses from './routes/courses.js';
 
 const app = express();
+
 app.use(express.json());
+
 app.use(cors());
+
 app.use(expressMongoSanitize());
+
 connectToDB();
 
 app.use('/register', register);
@@ -20,6 +25,7 @@ app.use('/login', login);
 app.use('/timetable', timetable);
 app.use('/share', share);
 app.use('/verify', verify);
+app.use('/courses', courses);
 
 app.listen(envHandler('port'),() => {
     console.log('Server started on port 3000')
