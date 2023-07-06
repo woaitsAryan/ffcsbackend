@@ -10,8 +10,10 @@ const courseSchema = new mongoose.Schema({
         slots: [
             {
                 _id: false,
-                slot: { type: String, required: true },
+                theoryslot: { type: String, required: true },
                 faculty: { type: String, required: true },
+                venue: { type: String, required: true },
+                labslot: [{ type: String, required: true }]
             }
         ]
     }]
