@@ -4,6 +4,6 @@ import { Coursecontroller, Slotcontroller } from '../controllers/coursescontroll
 const courses = express.Router();
 
 courses.get('/:section', Coursecontroller);
-courses.get('/slots/:section/:course', Slotcontroller)
+courses.get('/slots/:section/:coursecode', Slotcontroller)
 
 export default courses;

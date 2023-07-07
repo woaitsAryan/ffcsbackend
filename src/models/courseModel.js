@@ -13,7 +13,7 @@ const courseSchema = new mongoose.Schema({
                 theoryslot: { type: String, required: true },
                 faculty: { type: String, required: true },
                 venue: { type: String, required: true },
-                labslot: [{ type: String, required: true }]
+                labslot: { type: String, required: true }
             }
         ]
     }]

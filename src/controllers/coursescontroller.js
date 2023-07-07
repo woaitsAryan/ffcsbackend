@@ -14,12 +14,12 @@ export const Coursecontroller = catchAsync(
 export const Slotcontroller = catchAsync(
     async (req, res) => {
         const section = req.params.section;
-        const course = req.params.course;
+        const coursecode = req.params.coursecode;
         const courses = await Course.findOne({ type: section });
         if(!courses){
             return res.status(400).json({ error: 'Invalid section' });
         }
-        const slots = courses.details.filter((item) => item.name === course);
+        const slots = courses.details.filter((item) => item.code === coursecode);
         return res.json({ slots: slots[0].slots });
     }
 )
