@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     username: { type: String, required: true, unique: true },
     passwordHash: { type: String, required: true },
+    friendid: {type: String},
     timetables: [[{
         _id: false,
         day: { type: String, required: true },
