@@ -7,12 +7,13 @@ export const Updatecontroller = catchAsync(
       const { userID } = req.userID;
       const {timetable, num, friendid} = req.body;
       const timetablenum = parseInt(num);
-      if(friendid != null){
+      const user = await User.findById(userID);
+      if(friendid != undefined){
         const friend = await User.findById(friendid);
         if(!friend){
           return res.status(400).json({ error: 'Friend not found' });
         }
-        if(friend.friendid != userID){
+        if(friend.friendid != user._id){
           return res.status(400).json({ error: 'You are not his friend' });
         }
         if (friend.timetables.length > timetablenum) {
@@ -22,7 +23,6 @@ export const Updatecontroller = catchAsync(
         }
       }
       else{
-        const user = await User.findById(userID);
         if (!user) {
           return res.status(400).json({ error: 'User not found' });
         }

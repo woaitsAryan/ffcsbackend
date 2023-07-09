@@ -23,6 +23,7 @@ export const Friendcontroller = catchAsync(
         const {userID} = req.userID;
         const {friendname} = req.body;
         const friendID = await User.findOne({username: friendname});
+        console.log(friendID)
         if(!friendID){
             return res.status(400).json({ error: 'Friend not found' });
         }
@@ -32,5 +33,6 @@ export const Friendcontroller = catchAsync(
         }
         user.friendid = friendID._id;
         await user.save();
+        console.log(user.friendid)
         return res.json({message: 'Friend added'});
     })
