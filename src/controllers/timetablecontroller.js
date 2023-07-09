@@ -1,6 +1,6 @@
 import User from '../models/userModel.js';
 import catchAsync from '../helpers/catchAsync.js';
-import { getDayNumber } from '../helpers/daynum.js';
+import { timetableDefaultValue } from '../models/defaulttimetable.js';
 
 export const Updatecontroller = catchAsync(
     async(req, res) => {
@@ -40,14 +40,14 @@ export const Updatecontroller = catchAsync(
 export const Storecontroller = catchAsync(
     async(req, res) => {
         const {userID} = req.userID;
-        const { timetable} = req.body;
+        const { timetable, num} = req.body;
         
         const user = await User.findById(userID);
 
         if(!user){
             return res.status(400).json({ error: 'User not found' });
         }
-        user.timetables.push(timetable);
+        user.timetables[num] = timetable;
 
         await user.save();
         return res.json({ message: 'Timetable saved successfully' });
@@ -63,7 +63,7 @@ export const Resetcontroller = catchAsync(
         if(!user){
             return res.status(400).json({ error: 'User not found' });
         }
-        user.timetables.splice(num, 1);
+        user.timetables.splice(num, 1, timetableDefaultValue);
         await user.save();
         return res.json({ message: 'Timetable reset' });
 })  
