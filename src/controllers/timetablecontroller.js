@@ -27,7 +27,7 @@ export const Updatecontroller = catchAsync(
           return res.status(400).json({ error: 'User not found' });
         }
       
-        if (user.timetables.length > timetablenum) {
+        if (user.timetables.length >= timetablenum) {
           user.timetables[timetablenum] = timetable;
           await user.save();
           return res.json({ message: 'Timetable updated' });
