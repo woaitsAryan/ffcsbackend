@@ -1,6 +1,8 @@
 import { config } from 'dotenv';
+import path from "path";
+const __dirname = path.resolve();
 
-config({ path: '../.env' });
+config({ path: __dirname+ "/.env" });
 
 const envHandler = (envName) => {
   const env = process.env[envName];
@@ -11,3 +13,4 @@ const envHandler = (envName) => {
 };
 
 export default envHandler;
+
