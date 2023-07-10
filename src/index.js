@@ -27,7 +27,7 @@ app.use('/share', share);
 app.use('/verify', verify);
 app.use('/courses', courses);
 
-app.listen(envHandler('port'),"127.0.0.1",() => {
+app.listen(envHandler('port'),"0.0.0.0",() => {
     console.log('Server started on port 3000')
 });
 

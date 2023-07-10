@@ -15,6 +15,7 @@ export const Finddbcontroller = catchAsync(
             return res.status(400).json({ error: 'User not found' });
         }
         const timetable = user.timetables[num];
+        console.log('finding timetable')
         return res.json({timetable: timetable});
 })
 
@@ -34,5 +35,6 @@ export const Friendcontroller = catchAsync(
         user.friendid = friendID._id;
         await user.save();
         console.log(user.friendid)
+        console.log('added friend')
         return res.json({message: 'Friend added'});
     })

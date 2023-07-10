@@ -16,9 +16,11 @@ export const Updatecontroller = catchAsync(
         if(friend.friendid != user._id){
           return res.status(400).json({ error: 'You are not his friend' });
         }
+        console.log('friend db updating')
         if (friend.timetables.length > timetablenum) {
           friend.timetables[timetablenum] = timetable;
           await friend.save();
+          console.log("friend db updated")
           return res.json({ message: 'Timetable updated' });
         }
       }
