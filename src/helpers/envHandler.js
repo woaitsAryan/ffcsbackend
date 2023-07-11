@@ -1,8 +1,6 @@
 import { config } from 'dotenv';
-import path from "path";
-const __dirname = path.resolve();
 
-config({ path: __dirname+ "/.env" });
+config({ path: '../.env' });
 
 const envHandler = (envName) => {
   const env = process.env[envName];
