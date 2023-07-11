@@ -30,10 +30,12 @@ export const Inputcontroller = catchAsync(
         const {type} = details;
         const existingType = await Course.findOne({ type });
         if (existingType) {
+            console.log(existingType.type)
             console.log("Type already exists");
             //update the existing type
             existingType.details = details.details;
             await existingType.save();
+            return res.json({ message: 'Course data saved successfully' });
         }
         const newType = new Course(details);
         await newType.save();

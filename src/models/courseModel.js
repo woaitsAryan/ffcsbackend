@@ -4,8 +4,8 @@ const courseSchema = new mongoose.Schema({
     type: { type: String, required: true, unique: true },
     details:[{
         _id: false,
-        code: { type: String, required: true, unique: true },
-        name: { type: String, required: true, unique: true },
+        code: { type: String, required: true },
+        name: { type: String, required: true },
         credits: { type: Number, required: true },
         slots: [
             {
